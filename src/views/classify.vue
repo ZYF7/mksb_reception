@@ -302,6 +302,7 @@ export default {
            this.price717 = [];
             this.maxPrice = null;
       this.minPrice = null;
+      this.myName="";
       document.querySelector("#class-title").classList = "class117";
       this.goodTypeid = "";
       this.commodityList();
@@ -313,6 +314,7 @@ export default {
            this.price717 = [];
             this.maxPrice = null;
       this.minPrice = null;
+      this.myName="";
       var goodClass7 = document.querySelectorAll(".goodClass");
       for (let i = 0; i < goodClass7.length; i++) {
         if (goodClass7[i].getAttribute("goodidid") == n) {

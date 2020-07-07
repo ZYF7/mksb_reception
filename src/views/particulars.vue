@@ -190,12 +190,13 @@ export default {
             // alert("fsadf");
             this.myPrice = this.particularsData.price;
             this.$refs.r2.style.display="none"
+             this.$refs.r.style.textDecoration="none";
           } else if (this.$route.query.r == 1) {
             // alert("sp");
             this.myPrice = this.particularsData.price;
             this.myPrice7 = this.particularsData.promotion_price;
                this.$refs.r2.style.display="inline-block"
-                            this.$refs.r.style.textDecoration="line-through";
+              this.$refs.r.style.textDecoration="line-through";
           }
 
           var go = this.particularsData.info;
