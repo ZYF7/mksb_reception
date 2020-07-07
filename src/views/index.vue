@@ -6,7 +6,7 @@
     <section id="heders-box" class="heders-box">
       <div class="headrs">
         <!-- log -->
-        <a  class="log">
+        <a class="log">
           <img src="../assets/img/download.png" alt />
         </a>
         <!-- 搜索框 -->
@@ -16,11 +16,8 @@
             <a @click="search117()">搜索</a>
           </div>
           <ul class="search-list">
-            <li>空调钜惠</li>
-            <li>潮流小电</li>
-            <li>厨卫</li>
-            <li>65英寸电视</li>
-            <li>特惠家电</li>
+            <li @click="promotion7" v-for="(item,index) in indexPromotionData227" :key="index">{{item.title}}</li>
+          
           </ul>
         </div>
         <div style=" clear: both;"></div>
@@ -90,7 +87,12 @@
         </div>
         <!-- list -->
         <div class="promotion-list">
-          <div class="list-box7" @click="goParticulars(t.good_id)" v-for="(t,i) in item.child" :key="i">
+          <div
+            class="list-box7"
+            @click="goParticulars(t.good_id)"
+            v-for="(t,i) in item.child"
+            :key="i"
+          >
             <a>
               <div class="list-img-box">
                 <img :src="t.pic" />
@@ -103,7 +105,7 @@
       </div>
     </div>
     <!-- 回顶部 -->
-    <ul class="back-to-the-top">
+    <ul class="back-to-the-top" ref="abcTop">
       <li
         v-for="(item,index) in indexPromotionData117"
         :key="index"
@@ -116,11 +118,7 @@
         <a>top</a>
       </li>
     </ul>
-    <!-- <div class="testbtn" @click="index7">主页</div>
-    <div class="testbtn" @click="promotion7">促销</div>
-    <div class="testbtn" @click="classify7">分类</div>
-    <div class="testbtn" @click="relation7">联系我们</div>
-    <div class="testbtn" @click="merchandise7">商品详情</div>-->
+
     <!-- 公共底部 -->
     <bottom></bottom>
   </div>
@@ -143,6 +141,7 @@ export default {
       advertisingArr: [],
       indexPromotionData: [],
       indexPromotionData117: [],
+         indexPromotionData227: [],
       bciimgdata: [],
       // goodid
       goodid7: ""
@@ -160,7 +159,7 @@ export default {
     promotion7() {
       this.$router.push({
         path: "/promotion",
-        query: { id: "100", name: "ahhahha" }
+        query:""
       });
     },
     // 点击分类跳转
@@ -183,7 +182,7 @@ export default {
     merchandise7() {
       this.$router.push({
         path: "/particulars",
-        query: { id: "100", name: "ahhahha" }
+        query: ""
       });
     },
     // 轮播图渲染方法
@@ -208,12 +207,13 @@ export default {
     },
     // 回顶部按钮
     sbgl() {
-      window.onscroll = function() {
+      window.onscroll = () => {
         var TOP = document.documentElement.scrollTop;
         if (TOP > 400) {
-          document.querySelector(".back-to-the-top").style.display = "block";
+          // console.log( this.$refs.abcTop.style.display);
+          this.$refs.abcTop.style.display = "block";
         } else {
-          document.querySelector(".back-to-the-top").style.display = "none";
+          this.$refs.abcTop.style.display = "none";
         }
       };
     },
@@ -288,7 +288,7 @@ export default {
         methods: "post",
         url: "http://api_dev.wanxikeji.cn/api/advertList",
         params: {
-          is_new:1
+          is_new: 1
         }
       })
         .then(result => {
@@ -305,16 +305,17 @@ export default {
       this.axios({
         methods: "post",
         url: "http://api_dev.wanxikeji.cn/api/promotionTypeGoodList",
-        params: ""
+        params: "",
       })
         .then(result => {
-          console.log(result.data.data);
+          // console.log(result.data.data);
           this.indexPromotionData = result.data.data;
           var a117 = result.data.data;
           for (let i = 0; i < a117.length; i++) {
             a117[i].promotion_id = "z" + a117[i].promotion_id;
           }
           this.indexPromotionData117 = a117;
+          this.indexPromotionData227=a117.slice(0,5);
           // title图片
           for (var n = 0; n < a117.length; n++) {
             this.bciimgdata.push({
@@ -328,10 +329,11 @@ export default {
           console.log(error);
         });
     },
+    // 去商品详情页
     goParticulars(x) {
       this.$router.push({
         path: "/particulars",
-        query: { myid: x }
+        query: { myid: x,r:1}
       });
     }
   },
@@ -341,8 +343,6 @@ export default {
     // 获取轮播图数据
     this.slideData();
 
-    this.sbgl();
-
     // 获取分类
     this.funClassify();
 
@@ -351,6 +351,13 @@ export default {
 
     //获取首页促销列表信息
     this.indexPromotion();
+
+    this.sbgl();
+
+    document.documentElement.scrollTop = 0;
+  },
+  destroyed() {
+   window.onscroll=null;
   }
 };
 </script>
@@ -772,6 +779,7 @@ a {
   font-size: 36px;
   display: block;
   user-select: none;
+  text-shadow: 0 0 5px #888;
 }
 
 .promotion-title span {

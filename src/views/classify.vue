@@ -210,6 +210,9 @@ export default {
     },
     // 分类选中样页码加载初始化
     classcolorfun() {
+// this.$nextTick(()=>{
+
+
       if (this.goodTypeid == "" || this.goodTypeid == null) {
         document.querySelector("#class-title").classList = "class117";
         //  document.querySelector("#class-title").style.color="red"
@@ -226,6 +229,8 @@ export default {
           }
         }
       }
+
+      // })
     },
     //热卖列表数据
     hotSale() {

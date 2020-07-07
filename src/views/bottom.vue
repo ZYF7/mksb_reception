@@ -26,7 +26,7 @@
         <a>网商银行</a>
       </div>
       <!-- 技术支持；万息科技 -->
-      <span class="support">技术支持:<a>万息科技</a></span>
+      <span class="support">技术支持:<a href="https://www.baidu.com">万息科技</a></span>
     </div>
   </div>
 </template>
@@ -61,5 +61,10 @@ export default {};
 }
 .support >a{
   cursor: pointer;
+    color:#2c3e50;
+
+}
+.support >a:hover{
+  color:rgb(219, 121, 40);
 }
 </style>

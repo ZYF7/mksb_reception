@@ -14,6 +14,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return{
+     
+    }
+  },
   methods: {
     // 联系我们
     relation7() {
@@ -27,8 +32,10 @@ export default {
         path: "/",
         query: ""
       });
-    }
-  }
+    },
+   
+  },
+
 };
 </script>
 <style>

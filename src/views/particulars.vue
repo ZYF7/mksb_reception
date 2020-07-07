@@ -12,7 +12,7 @@
         <!-- 搜索框 -->
         <div class="search-box">
           <div class="search">
-             <input v-model="searchName2" type="text" placeholder=" 请输入内容" />
+            <input v-model="searchName2" type="text" placeholder=" 请输入内容" />
             <a @click="classify72()">搜索</a>
           </div>
         </div>
@@ -38,8 +38,31 @@
       <div class="purchase">
         <h3>{{particularsData.good_name}}</h3>
         <div class="price7">
-          价格:
-          <span>&yen;{{particularsData.price}}</span>
+          <div class="price7-all">
+            价格:
+            <span class="price-num" ref="r">&yen;{{myPrice}}</span>
+            <span class="price-num" ref="r2">&yen;{{myPrice7}}</span>
+          </div>
+          <div class="price7-all">
+            颜色:
+            <span
+              class="Choose7 mycolor7"
+              @click="choose(1,index)"
+              ref="color"
+              v-for="(item,index) in color77"
+              :key="index"
+            >{{item}}</span>
+          </div>
+          <div class="price7-all">
+            版本:
+            <span
+              class="Choose7 myversions7"
+              @click="choose(2,index2)"
+              ref="versions"
+              v-for="(item2,index2) in versions77"
+              :key="index2"
+            >{{item2}}</span>
+          </div>
         </div>
         <!-- 数量 -->
         <div class="quantity">
@@ -57,23 +80,19 @@
         </div>
       </div>
       <div class="advertising-right">
-        <div class="adv">
-          <img src="../assets/img/15KaEZJJiXW5P6uN536vgk9lD2KKp3Ot3dWHuddL.png" alt />
+        <a class="adv" v-for="(item,index) in advertisingArr2" :key="index" href="item.url">
+          <img :src="item.pic" alt />
           <p>公积金代缴</p>
-        </div>
-        <div class="adv">
-          <img src="../assets/img/15KaEZJJiXW5P6uN536vgk9lD2KKp3Ot3dWHuddL.png" alt />
-          <p>公积金代缴</p>
-        </div>
+        </a>
       </div>
     </section>
     <!-- 商品详情 -->
     <div class="particulars7">
-      <div class="particulars7-left">
+      <div class="particulars7-left" @click="par77(is_newData2.good_id)">
         <div class="particulars7-left-title">爆款商品</div>
-        <img src="../assets/img/15KaEZJJiXW5P6uN536vgk9lD2KKp3Ot3dWHuddL.png" alt />
-        <div class="particulars7-left-price">￥6000.00</div>
-        <a class="particulars7-left-details">商品商品</a>
+        <img :src="is_newData2.img" alt />
+        <div class="particulars7-left-price">￥{{is_newData2.price}}</div>
+        <a class="particulars7-left-details">{{is_newData2.good_name}}</a>
       </div>
 
       <!-- 选项卡2 -->
@@ -83,8 +102,9 @@
           <a class="Tabs-nav2">联系我们</a>
         </nav>
         <div class="Tabs2-option-box">
-          <img class="Tabs2-option2" :src="particularsData.img" alt />
-          <div class="Tabs2-option2">联系我们</div>
+          <div class="Tabs2-option2" v-html="goodReferral"></div>
+          <!-- <img class="Tabs2-option2" :src="particularsData.img" alt /> -->
+          <div class="Tabs2-option2" v-html="AboutUs77">联系我们</div>
         </div>
       </div>
     </div>
@@ -98,9 +118,23 @@ export default {
       num: 1,
       // data
       particularsData: [],
+      // 商品价格
+      myPrice: "",
+      // 促销
+      myPrice7: "",
       good_img: [],
-      searchName2:"",
-      goodid72:""
+      searchName2: "",
+      goodid72: "",
+      goodReferral: "",
+      // 颜色
+      color77: ["默认"],
+      // 版本
+      versions77: ["默认"],
+      // 广告
+      advertisingArr2: [],
+      is_newData2: [],
+      goodid7: 0,
+      AboutUs77: ""
     };
   },
   methods: {
@@ -146,18 +180,66 @@ export default {
         url: "http://api_dev.wanxikeji.cn/api/goodInfo",
         params: {
           good_id: this.$route.query.myid
+          // good_id: this.$route.params.myid
         }
       })
         .then(result => {
           console.log(result.data.data);
           this.particularsData = result.data.data;
+          if (this.$route.query.r == "" || this.$route.query.r == null) {
+            // alert("fsadf");
+            this.myPrice = this.particularsData.price;
+            this.$refs.r2.style.display="none"
+          } else if (this.$route.query.r == 1) {
+            // alert("sp");
+            this.myPrice = this.particularsData.price;
+            this.myPrice7 = this.particularsData.promotion_price;
+               this.$refs.r2.style.display="inline-block"
+                            this.$refs.r.style.textDecoration="line-through";
+          }
+
           var go = this.particularsData.info;
+          console.log(this.particularsData);
+
           for (let i = 0; i < go.length; i++) {
-            var a = go[i].imgs.replace(new RegExp("\\\\", "g"), "");
+            var a = eval("'" + go[i].imgs + "'");
+
+            a = go[i].imgs.replace(new RegExp("\\\\", "g"), "");
+            //  console.log(a);
             var b = a.replace(new RegExp('\\"', "g"), "");
             var d = b.split(",");
+            if (d[d.length - 1] == "" || d[d.length - 1] == null) {
+              d.splice(d.length - 1, 1);
+            }
+            // console.log(d);
+
             this.good_img = d;
 
+            var a2 = eval("'" + go[i].colour + "'");
+            // a2 = go[i].colour.replace(new RegExp("\\\\", "g"), "");
+
+            var b2 = a2.replace(new RegExp('"', "g"), "");
+            var d2 = b2.split(",");
+            if (d2[d2.length - 1] == "" || d2[d2.length - 1] == null) {
+              d2.splice(d.length - 1, 1);
+            }
+            this.color77 = d2;
+            // console.log(this.color77);
+
+            var a3 = eval("'" + go[i].edition + "'");
+            console.log(a3);
+            a3 = a3.replace(new RegExp("\\\\", "g"), "");
+            var b3 = a3.replace(new RegExp('\\"', "g"), "");
+            var d3 = b3.split(",");
+            if (d3[d3.length - 1] == "" || d3[d3.length - 1] == null) {
+              d3.splice(d.length - 1, 1);
+            }
+            this.versions77 = d3;
+            // console.log(this.versions77);
+
+            var a7 = eval("'" + go[i].info + "'");
+            var b7 = a7.replace(new RegExp('\\"', "g"), "");
+            this.goodReferral = b7;
             this.$nextTick(() => {
               this.Tabs1();
             });
@@ -167,7 +249,15 @@ export default {
           console.log(error);
         });
     },
-        // 分类--------------------------------
+    par77(x) {
+      this.$router.push({
+        path: "/particulars",
+        query: { myid: x }
+      });
+      this.commodityData();
+      document.documentElement.scrollTop = 0;
+    },
+    // 分类--------------------------------
     classify72() {
       var nameValue = this.searchName2;
       var goodidval = this.goodid72;
@@ -176,11 +266,97 @@ export default {
         query: { name: nameValue, goodid: goodidval }
       });
     },
+    choose(n, d) {
+      var cl;
+      if (n == 1) {
+        cl = this.$refs.color;
+        // console.log(cl);
+      } else if (n == 2) {
+        cl = this.$refs.versions;
+        // console.log(cl);
+      }
+      for (let i = 0; i < cl.length; i++) {
+        cl[i].style.borderColor = "#ccc";
+      }
+      // console.log(d);
+
+      cl[d].style.borderColor = "#dd4545";
+    },
+    //获取广告信息---------------------------------------
+    advertisingData2() {
+      this.axios({
+        methods: "post",
+        url: "http://api_dev.wanxikeji.cn/api/advertList",
+        params: {
+          is_new: 1
+        }
+      })
+        .then(result => {
+          var advertising2 = result.data.data.slice(0, 2);
+          this.advertisingArr2 = advertising2;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+    //数据
+    hotSale2() {
+      this.axios({
+        methods: "post",
+        url: "http://api_dev.wanxikeji.cn/api/goodList",
+        params: {
+          page: "1",
+          // size:"2",
+          search: "", //为:""就全查
+          is_new: 1 //1就热卖
+        }
+      })
+        .then(result => {
+          var hotSale777 = result.data.data.data[0];
+          this.is_newData2 = hotSale777;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    //获取关于我们---------------------------------------
+    AboutUs7() {
+      this.axios({
+        methods: "post",
+        url: "http://api_dev.wanxikeji.cn/api/aboutUs",
+        params: ""
+      })
+        .then(result => {
+          this.AboutUs77 = result.data.data.info;
+          // console.log(this.AboutUs77);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
   },
   mounted() {
     this.Tabs2();
     this.commodityData();
     // alert(this.$route.query.myid)
+    this.advertisingData2();
+    this.hotSale2();
+    document.documentElement.scrollTop = 0;
+    this.AboutUs7();
+  },
+  watch: {
+    $route(to, from) {
+      if (to.query.myid !== from.query.myid) {
+        // 加载数据
+        this.Tabs2();
+        this.commodityData();
+        // alert(this.$route.query.myid)
+        this.advertisingData2();
+        this.hotSale2();
+        document.documentElement.scrollTop = 0;
+      }
+    }
   }
 };
 </script>
@@ -335,7 +511,8 @@ a {
 
 .purchase {
   width: 600px;
-  height: 395px;
+  /* height: 395px; */
+  min-height: 395px;
   /* background-color: rgb(48, 177, 138); */
   float: left;
   padding: 10px 30px;
@@ -360,14 +537,40 @@ a {
 }
 .price7 {
   width: 520px;
-  height: 150px;
+  /* height: 150px; */
+  min-height: 150px;
   margin: 40px;
   font-size: 14px;
 }
-.price7 > span {
+.price7-all > .price-num {
   font-size: 22px;
   color: #dd4545;
   font-weight: 700;
+}
+.price7-all > .price-num:nth-child(2){
+margin-left: 15px;
+}
+
+.Choose7 {
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  /* user-select: none; */
+  cursor: pointer;
+  display: inline-block;
+}
+.mycolor7:nth-child(1) {
+  border-color: #dd4545;
+}
+.Choose7:hover {
+  border: 1px solid #dd4545;
+}
+.myversions7:nth-child(1) {
+  border-color: #dd4545;
+}
+.price7-all {
+  margin: 10px 0;
 }
 .quantity {
   width: 600px;
@@ -389,6 +592,11 @@ a {
   color: #fff;
   user-select: none;
   cursor: pointer;
+  transition: all 0.2s;
+
+}
+.contact-us:hover {
+  box-shadow: 0 0 7px #000;
 }
 /* 计数器 */
 .mynum {
@@ -414,14 +622,19 @@ a {
   -webkit-box-orient: vertical;
   font-size: 14px;
   line-height: 19px;
+  color: rgb(5, 4, 4);
   margin: 5px;
+}
+.adv:hover > p {
+  color: rgb(219, 78, 13);
 }
 /* 商品详情 */
 .particulars7 {
   width: 1200px;
   margin: 0 auto;
   margin-top: 60px;
-  height: 1500px;
+  /* height: 1500px; */
+  margin-bottom: 50px;
   /* background-color: rgba(53, 136, 101, 0.575); */
   overflow: hidden;
 }
@@ -434,8 +647,9 @@ a {
   width: 230px;
   height: 383px;
   box-sizing: border-box;
-  border: 1px solid #555;
+  border: 1px solid #ccc;
   padding: 0 10px;
+  cursor: pointer;
   float: left;
 }
 .particulars7-left-title {
@@ -472,7 +686,7 @@ a {
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
-.particulars7-left-details:hover {
+.particulars7-left:hover > .particulars7-left-details {
   color: rgb(189, 63, 63);
   cursor: pointer;
 }
@@ -480,7 +694,7 @@ a {
 .Tabs2 {
   float: right;
   width: 960px;
-  height: 1200px;
+  /* height: 1200px; */
   /* background-color: rgb(132, 132, 218); */
 }
 .Tabs2-nav {
@@ -507,7 +721,7 @@ a {
 }
 .Tabs2-option-box {
   width: 960px;
-  height: 1133px;
+  /* height: 1133px; */
   box-sizing: border-box;
   padding-left: 20px;
   padding-top: 20px;
@@ -515,7 +729,7 @@ a {
 
 .Tabs2-option2 {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   display: none;
 }
 .Tabs2-option2:nth-child(1) {

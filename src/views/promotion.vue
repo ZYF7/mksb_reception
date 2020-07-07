@@ -100,7 +100,7 @@ export default {
       goParticulars(x){
        this.$router.push({
         path: "/particulars",
-        query: { myid: x}
+            query: { myid: x,r:1}
       });
         },
     //获取首页促销列表信息---------------------------------------
