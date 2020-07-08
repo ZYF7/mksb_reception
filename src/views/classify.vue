@@ -171,6 +171,10 @@ export default {
             }
           }
           this.classifyData2 = testdata;
+            //  分类选中样式
+          this.$nextTick(() => {
+            this.classcolorfun();
+          });
           // this.classifyDataTitle = testdata[0].type_name;
           console.log("testdata", this.classifyData2);
         })
@@ -212,19 +216,20 @@ export default {
     classcolorfun() {
 // this.$nextTick(()=>{
 
+    var goodClass7 = document.querySelectorAll(".goodClass");
+      
 
       if (this.goodTypeid == "" || this.goodTypeid == null) {
         document.querySelector("#class-title").classList = "class117";
-        //  document.querySelector("#class-title").style.color="red"
+          for (let i = 0; i < goodClass7.length; i++) {
+          goodClass7[i].classList = "goodClass"
+        }
       } else {
-        var goodClass7 = document.querySelectorAll(".goodClass");
-        // console.log(goodClass7);
-
+        // var goodClass7 = document.querySelectorAll(".goodClass");
+        document.querySelector("#class-title").classList = "";
         for (let i = 0; i < goodClass7.length; i++) {
-          // console.log(goodClass7[i].getAttribute("goodidid"));
-
+          goodClass7[i].classList = "goodClass"
           if (goodClass7[i].getAttribute("goodidid") == this.goodTypeid) {
-            // alert("sdfjsla");
             goodClass7[i].classList = "goodClass class117";
           }
         }
@@ -234,6 +239,7 @@ export default {
     },
     //热卖列表数据
     hotSale() {
+   
       this.axios({
         methods: "post",
         url: "http://api_dev.wanxikeji.cn/api/goodList",
@@ -247,10 +253,7 @@ export default {
         .then(result => {
           console.log("TEST热", result.data.data.data);
           this.is_newData = result.data.data.data;
-          //  分类选中样式
-          this.$nextTick(() => {
-            this.classcolorfun();
-          });
+      
         })
         .catch(function(error) {
           console.log(error);
@@ -305,6 +308,13 @@ export default {
       this.myName="";
       document.querySelector("#class-title").classList = "class117";
       this.goodTypeid = "";
+
+
+        this.$router.push({
+        path: "/classify",
+        query: { name: "", goodid: this.goodTypeid }
+      });
+
       this.commodityList();
     },
     //分类点击事件
@@ -322,7 +332,13 @@ export default {
         }
       }
       this.goodTypeid=n;
-      this.commodityList();
+      
+        this.$router.push({
+        path: "/classify",
+        query: { name: "", goodid: this.goodTypeid }
+      });
+      
+      // this.commodityList();
     },
       index7() {
       this.$router.push({
@@ -347,10 +363,19 @@ export default {
     this.commodityList();
     // 热卖列表
     this.hotSale();
+     
+  },   watch: {
+    $route(to, from) {
+      if (to.query.goodid !== from.query.goodid) {
+             
+            this.keywordfun();
+  this.classcolorfun()
+        // 获取商品列表
+    this.commodityList();
+      }
+    }
   }
-  // created(){
-  //   this.classcolorfun();
-  // }
+
 };
 </script>
 <style scoped>
