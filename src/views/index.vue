@@ -241,7 +241,7 @@ export default {
           // console.log(classData);
           for (let i = 0; i < classData.length; i++) {
             if (classData[i].parent_id == "0") {
-              console.log(classData[i].type_name);
+              // console.log(classData[i].type_name);
               classData[i].children = [];
               testdata.push(classData[i]);
             }
@@ -322,8 +322,8 @@ export default {
               backgroundImage: "url(" + a117[n].pic + ")"
             });
           }
-          console.log(this.bciimgdata);
-          console.log("117", this.indexPromotionData117);
+          // console.log(this.bciimgdata);
+          // console.log("117", this.indexPromotionData117);
         })
         .catch(function(error) {
           console.log(error);

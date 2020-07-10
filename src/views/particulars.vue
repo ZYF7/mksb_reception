@@ -2,8 +2,8 @@
   <div>
     <!-- 公共top -->
     <top></top>
-
-    <section id="heders-box" class="heders-box">
+    <div style="background-color:white;">
+<section id="heders-box" class="heders-box">
       <div class="headrs">
         <!-- log -->
         <a @click="index7" class="log">
@@ -108,6 +108,8 @@
         </div>
       </div>
     </div>
+    </div>
+    
     <bottom></bottom>
   </div>
 </template>
@@ -184,7 +186,7 @@ export default {
         }
       })
         .then(result => {
-          console.log(result.data.data);
+          // console.log(result.data.data);
           this.particularsData = result.data.data;
           if (this.$route.query.r == "" || this.$route.query.r == null) {
             // alert("fsadf");
@@ -200,7 +202,7 @@ export default {
           }
 
           var go = this.particularsData.info;
-          console.log(this.particularsData);
+          // console.log(this.particularsData);
 
           for (let i = 0; i < go.length; i++) {
             var a = eval("'" + go[i].imgs + "'");
@@ -228,7 +230,7 @@ export default {
             // console.log(this.color77);
 
             var a3 = eval("'" + go[i].edition + "'");
-            console.log(a3);
+            // console.log(a3);
             a3 = a3.replace(new RegExp("\\\\", "g"), "");
             var b3 = a3.replace(new RegExp('\\"', "g"), "");
             var d3 = b3.split(",");

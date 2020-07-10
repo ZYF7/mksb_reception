@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="b-box">
-      <div class="b-list">
+    <div class="b-box"  style="background-color:white;">
+      <div class="b-list" style="background-color:white;">
         <a>阿里巴巴集团</a>
         <a>阿里巴巴国际交易市场</a>
         <a>1688</a>
@@ -36,7 +36,7 @@ export default {};
 <style>
 .b-box {
   width: 100%;
-  background-color: #fff;
+  background-color: #fff !important;
 }
 .b-list {
   width: 1200px;

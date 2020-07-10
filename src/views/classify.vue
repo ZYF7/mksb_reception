@@ -1,7 +1,8 @@
 <template>
   <div>
     <top></top>
-    <section id="heders-box" class="heders-box">
+    <div style="background-color:white;">
+      <section id="heders-box" class="heders-box">
       <div class="headrs">
         <!-- log -->
         <a  @click="index7" class="log">
@@ -87,6 +88,8 @@
         </div>
       </div>
     </section>
+    </div>
+    
     <bottom></bottom>
   </div>
 </template>
@@ -153,10 +156,10 @@ export default {
         .then(result => {
           var testdata = [];
           var classData = result.data.data;
-          console.log(classData);
+          // console.log(classData);
           for (let i = 0; i < classData.length; i++) {
             if (classData[i].parent_id == "0") {
-              console.log(classData[i].type_name);
+              // console.log(classData[i].type_name);
               classData[i].children = [];
               testdata.push(classData[i]);
             }
@@ -176,7 +179,7 @@ export default {
             this.classcolorfun();
           });
           // this.classifyDataTitle = testdata[0].type_name;
-          console.log("testdata", this.classifyData2);
+          // console.log("testdata", this.classifyData2);
         })
         .catch(function(error) {
           console.log(error);
@@ -198,7 +201,7 @@ export default {
         }
       })
         .then(result => {
-          console.log("TEST", result.data.data.data);
+          // console.log("TEST", result.data.data.data);
           //  this.commodityListData=[];
           this.count7 = result.data.data.count;
           this.commodityListData = result.data.data.data;
@@ -251,7 +254,7 @@ export default {
         }
       })
         .then(result => {
-          console.log("TEST热", result.data.data.data);
+          // console.log("TEST热", result.data.data.data);
           this.is_newData = result.data.data.data;
       
         })
@@ -392,6 +395,9 @@ li {
 a {
   text-decoration: none;
 }
+body{
+  background-color: #ffffff !important;
+}
 
 /* 头部 */
 
@@ -478,6 +484,7 @@ a {
   margin: 0 auto;
   /* height: 1000px; */
   /* background-color: rgba(18, 156, 92, 0.342); */
+  /* background-color: #ffffff; */
 }
 /* 推荐 */
 .recommend {
