@@ -47,7 +47,7 @@
             <a
               v-for="(item,index) in slideshowData"
               :key="index"
-              href="item.url"
+              :href="item.url"
               class="swiper-slide"
             >
               <img :src="item.pic" :title="item.title" alt />
